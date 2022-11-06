@@ -67,9 +67,6 @@ userController.getUserById = async (req, res, next) => {
   const { targetId } = req.params;
 
   try {
-    //check if id from route is a mongo ObjectId
-    ObjectId.isValid(targetId);
-
     if (!targetId) throw new AppError(400, "Missing user id", "Bad Request");
 
     //--Query
@@ -102,8 +99,6 @@ userController.updateUserById = async (req, res, next) => {
 
   const allowedUpdate = ["name", "role", "idDeleted"];
   try {
-    //check if id from route is a mongo ObjectId
-    ObjectId.isValid(targetId);
     //check valid field
     if (!updateInfo || !targetId)
       throw new AppError(400, "No request body or no User id", "Bad Request");
@@ -130,16 +125,10 @@ userController.updateUserById = async (req, res, next) => {
 userController.deleteUserById = async (req, res, next) => {
   //in real project you will getting id from req. For updating and deleting, it is recommended for you to use unique identifier such as _id to avoid duplication
   // empty target mean delete nothing
-  const targetId = req.params;
+  const { targetId } = req.params;
 
   const options = { new: true };
   try {
-    if (ObjectId.isValid(targetId)) {
-      return true;
-    } else {
-      throw new AppError(400, "Invalid information: id", "Bad Request");
-    }
-    console.log("hello", targetId);
     if (!targetId) throw new AppError(400, "No User id", "Bad Request");
     console.log("hello", targetId);
     //--Query
@@ -152,7 +141,7 @@ userController.deleteUserById = async (req, res, next) => {
 };
 
 userController.getTasksByUserId = async (req, res, next) => {
-  const targetId = req.params;
+  const { targetId } = req.params;
 
   try {
     if (!targetId) throw new AppError(400, "Missing user id", "Bad request");

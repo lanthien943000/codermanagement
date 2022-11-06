@@ -35,7 +35,7 @@ taskController.createTask = async (req, res, next) => {
 };
 
 taskController.getTasks = async (req, res, next) => {
-  const allowedFilter = ["status", "createdAt", "updatedAt", "name"];
+  const allowedFilter = ["status", "search", "assignee"];
   const { ...filterQuery } = req.query;
 
   try {
@@ -141,10 +141,10 @@ taskController.getTasks = async (req, res, next) => {
 };
 
 taskController.getTaskById = async (req, res, next) => {
-  const { targetId } = req.params;
+  const { taskId } = req.params;
   try {
     //--Query
-    const taskById = await Task.findById(targetId).populate("assignee");
+    const taskById = await Task.findById(taskId).populate("assignee");
 
     sendResponse(res, 200, true, { taskById }, null, "Get task by id success");
   } catch (error) {
